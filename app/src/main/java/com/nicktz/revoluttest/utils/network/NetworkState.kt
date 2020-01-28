@@ -13,7 +13,7 @@ data class NetworkState private constructor(
     companion object {
         val LOADED =
             NetworkState(Status.SUCCESS)
-        val LOADING =
+        val INITIALIZING =
             NetworkState(Status.RUNNING)
         fun error(msg: String?) =
             NetworkState(
