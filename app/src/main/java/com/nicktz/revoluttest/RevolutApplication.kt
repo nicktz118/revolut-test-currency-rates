@@ -2,6 +2,7 @@ package com.nicktz.revoluttest
 
 import android.app.Application
 import com.nicktz.revoluttest.di.networkServiceModule
+import com.nicktz.revoluttest.di.viewModelModule
 import org.koin.core.context.startKoin
 
 class RevolutApplication : Application() {
@@ -10,7 +11,7 @@ class RevolutApplication : Application() {
         super.onCreate()
         startKoin {
             modules(
-                networkServiceModule
+                networkServiceModule + viewModelModule
             )
         }
     }
