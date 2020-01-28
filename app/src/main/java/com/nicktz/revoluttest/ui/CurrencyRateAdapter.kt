@@ -6,9 +6,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.nicktz.revoluttest.utils.network.NetworkState
 import com.nicktz.revoluttest.utils.network.NetworkStateItemViewHolder
+import com.nicktz.revoluttest.utils.toBigDecimalWith2digits
 
 class CurrencyRateAdapter(private val onClickCallBack: (CurrencyRateDisplayItem) -> Unit,
-                          private val onEditCallBack: (CurrencyRateDisplayItem) -> Unit)
+                          private val onAmountChanged: (Double) -> Unit)
     : ListAdapter<CurrencyRateDisplayItem, RecyclerView.ViewHolder>(CURRENCY_RATE_COMPARATOR) {
 
     private var networkState: NetworkState? = null
@@ -29,7 +30,16 @@ class CurrencyRateAdapter(private val onClickCallBack: (CurrencyRateDisplayItem)
     ) {
         if (payloads.isNotEmpty()) {
             val item = getItem(position)
-            (holder as CurrencyRateViewHolder).updateAmount(item)
+            payloads.forEach { payload ->
+                when(payload) {
+                    CurrencyRatePayload.AMOUNT -> {
+                        (holder as CurrencyRateViewHolder).updateAmount(item)
+                    }
+                    CurrencyRatePayload.EDITABLE -> {
+                        (holder as CurrencyRateViewHolder).updateAmountEditable(item)
+                    }
+                }
+            }
         } else {
             onBindViewHolder(holder, position)
         }
@@ -37,7 +47,7 @@ class CurrencyRateAdapter(private val onClickCallBack: (CurrencyRateDisplayItem)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            VIEW_TYPE_CURRENCY_RATE -> CurrencyRateViewHolder.create(parent, onClickCallBack, onEditCallBack)
+            VIEW_TYPE_CURRENCY_RATE -> CurrencyRateViewHolder.create(parent, onClickCallBack, onAmountChanged)
             VIEW_TYPE_NETWORK -> NetworkStateItemViewHolder.create(parent)
             else -> error("unknown view type")
         }
@@ -76,26 +86,33 @@ class CurrencyRateAdapter(private val onClickCallBack: (CurrencyRateDisplayItem)
     companion object {
         private const val VIEW_TYPE_NETWORK = 0
         private const val VIEW_TYPE_CURRENCY_RATE = 1
-        private val PAYLOAD_AMOUNT = Any()
+
+        enum class CurrencyRatePayload {
+            AMOUNT, EDITABLE
+        }
 
         val CURRENCY_RATE_COMPARATOR = object : DiffUtil.ItemCallback<CurrencyRateDisplayItem>() {
             override fun areContentsTheSame(oldItem: CurrencyRateDisplayItem, newItem: CurrencyRateDisplayItem): Boolean =
                 oldItem == newItem
 
             override fun areItemsTheSame(oldItem: CurrencyRateDisplayItem, newItem: CurrencyRateDisplayItem): Boolean =
-                oldItem.id == newItem.id
+                oldItem.title == newItem.title
 
             override fun getChangePayload(oldItem: CurrencyRateDisplayItem, newItem: CurrencyRateDisplayItem): Any? {
-                return if (sameAmount(oldItem, newItem)) {
-                    PAYLOAD_AMOUNT
-                } else {
-                    null
+                return when {
+                    sameAmount(oldItem, newItem) -> CurrencyRatePayload.AMOUNT
+                    sameEditable(oldItem, newItem) -> CurrencyRatePayload.EDITABLE
+                    else -> { null }
                 }
             }
         }
 
         private fun sameAmount(oldItem: CurrencyRateDisplayItem, newItem: CurrencyRateDisplayItem): Boolean {
-            return oldItem.amount != newItem.amount
+            return oldItem.amount.toBigDecimalWith2digits() != newItem.amount.toBigDecimalWith2digits()
+        }
+
+        private fun sameEditable(oldItem: CurrencyRateDisplayItem, newItem: CurrencyRateDisplayItem): Boolean {
+            return oldItem.editable != newItem.editable
         }
     }
 }
