@@ -4,14 +4,12 @@ import androidx.lifecycle.*
 import com.nicktz.revoluttest.data.CurrencyRateRepository
 import com.nicktz.revoluttest.dto.CurrencyData
 import com.nicktz.revoluttest.utils.network.NetworkState
-import com.nicktz.revoluttest.utils.toBigDecimalWith2digits
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.subjects.PublishSubject
-import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
 
 class CurrencyRatesViewModel(private val repository: CurrencyRateRepository) : ViewModel() {
