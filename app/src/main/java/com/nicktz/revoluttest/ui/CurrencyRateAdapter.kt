@@ -108,7 +108,7 @@ class CurrencyRateAdapter(private val onClickCallBack: (CurrencyRateDisplayItem)
         }
 
         private fun sameAmount(oldItem: CurrencyRateDisplayItem, newItem: CurrencyRateDisplayItem): Boolean {
-            return oldItem.amount.toBigDecimalWith2digits() != newItem.amount.toBigDecimalWith2digits()
+            return oldItem.amount != newItem.amount
         }
 
         private fun sameEditable(oldItem: CurrencyRateDisplayItem, newItem: CurrencyRateDisplayItem): Boolean {
