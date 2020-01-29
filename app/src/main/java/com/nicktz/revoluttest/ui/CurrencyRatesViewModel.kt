@@ -30,10 +30,8 @@ class CurrencyRatesViewModel(private val repository: CurrencyRateRepository) : V
     val networkState: LiveData<NetworkState> = _networkState
     val scrollToBaseCurrency: LiveData<Unit> = _scrollToBaseCurrency
 
-
     private val eventSubject: PublishSubject<UpdateEvent> = PublishSubject.create()
     private val compositeDisposable = CompositeDisposable()
-
 
     init {
         _networkState.value = NetworkState.INITIALIZING
@@ -68,6 +66,7 @@ class CurrencyRatesViewModel(private val repository: CurrencyRateRepository) : V
     private fun updateAmount(amount: Double): List<CurrencyRateDisplayItem> {
         currentCurrencyData.amount = amount
         return displayItems.mapIndexed { index, currencyRateDisplayItem ->
+            // no need to update base currency's amount
             if (index == 0) {
                 return@mapIndexed currencyRateDisplayItem.copy(amount = amount)
             }
@@ -82,6 +81,7 @@ class CurrencyRatesViewModel(private val repository: CurrencyRateRepository) : V
 
     private fun updateRates(rates: Map<String, Double>): List<CurrencyRateDisplayItem> {
         currentCurrencyData.rates = rates
+        // when initialization displayItems is empty, so it needs to create whole display items
         return if (displayItems.isEmpty()) {
             val base = CurrencyRateDisplayItem.createBaseCurrency(
                 currentCurrencyData.amount,
