@@ -20,7 +20,7 @@ class CurrencyRatesViewModel(private val repository: CurrencyRateRepository) : V
         data class UpdateLatestRates(val rates: Map<String, Double>) : UpdateEvent()
     }
 
-    private val currentCurrencyData = CurrencyData()
+    private var currentCurrencyData = CurrencyData()
     private val displayItems = mutableListOf<CurrencyRateDisplayItem>()
 
     private val _result = MutableLiveData<List<CurrencyRateDisplayItem>>()
@@ -64,7 +64,7 @@ class CurrencyRatesViewModel(private val repository: CurrencyRateRepository) : V
     }
 
     private fun updateAmount(amount: Double): List<CurrencyRateDisplayItem> {
-        currentCurrencyData.amount = amount
+        currentCurrencyData = currentCurrencyData.copy(amount = amount)
         return displayItems.mapIndexed { index, currencyRateDisplayItem ->
             // no need to update base currency's amount
             if (index == 0) {
@@ -80,7 +80,7 @@ class CurrencyRatesViewModel(private val repository: CurrencyRateRepository) : V
     }
 
     private fun updateRates(rates: Map<String, Double>): List<CurrencyRateDisplayItem> {
-        currentCurrencyData.rates = rates
+        currentCurrencyData = currentCurrencyData.copy(rates = rates)
         // when initialization displayItems is empty, so it needs to create whole display items
         return if (displayItems.isEmpty()) {
             val base = CurrencyRateDisplayItem.createBaseCurrency(
@@ -114,8 +114,7 @@ class CurrencyRatesViewModel(private val repository: CurrencyRateRepository) : V
         }
         // remove base from list
         val newBase = displayItems.removeAt(baseCurrencyRateIndex).copy(editable = true)
-        currentCurrencyData.base = newBase.title
-        currentCurrencyData.amount = newBase.amount
+        currentCurrencyData = currentCurrencyData.copy(base = newBase.title, amount = newBase.amount)
 
         // apply currencies behind base
         val newCurrencies = displayItems.map { it.copy(editable = false) }

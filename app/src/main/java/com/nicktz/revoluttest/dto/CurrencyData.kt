@@ -6,7 +6,7 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 
 data class CurrencyData(
-    var amount: Double = CurrencyRatesViewModel.DEFAULT_AMOUNT,
-    var base: String = CurrencyRatesViewModel.DEFAULT_CURRENCY,
-    var rates: Map<String, Double> = emptyMap()
+    val amount: Double = CurrencyRatesViewModel.DEFAULT_AMOUNT,
+    val base: String = CurrencyRatesViewModel.DEFAULT_CURRENCY,
+    val rates: Map<String, Double> = emptyMap()
 )
