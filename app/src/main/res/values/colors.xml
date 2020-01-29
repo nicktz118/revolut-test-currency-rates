@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#f3f4f6</color>
     <color name="colorPrimaryDark">#33000000</color>
-    <color name="colorAccent">#96eeeeee</color>
+    <color name="colorAccent">#1e9cde</color>
     <color name="black">#000000</color>
     <color name="foggyBlue">#a2adb6</color>
     <color name="rippleColor">#16000000</color>
