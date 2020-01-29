@@ -61,8 +61,6 @@ class CurrencyRateViewHolder(
             s?.let {
                 if (it.toString().isEmpty().not() || it.toString().isBlank().not()) {
                     onAmountChanged.invoke(it.toString().toDouble())
-                } else {
-                    onAmountChanged.invoke(0.0)
                 }
             }
         }
@@ -74,9 +72,7 @@ class CurrencyRateViewHolder(
 
     init {
         view.setOnClickListener {
-            currencyRate?.let { item ->
-                onClickCallBack(item)
-            }
+            onClickCallBack(currencyRate)
         }
     }
 
@@ -89,22 +85,25 @@ class CurrencyRateViewHolder(
             .load(item.flagResId)
             .transform(CircleCrop())
             .into(flagImageView)
-        updateAmountEditable(item)
         updateAmount(item)
+        updateAmountEditable(item)
     }
 
     fun updateAmount(currencyRate: CurrencyRateDisplayItem) {
         this.currencyRate = currencyRate
-        if (itemView.amountEditText.text.isNotEmpty() &&
-            itemView.amountEditText.text.isNotBlank() && currencyRate.editable
+        val text = itemView.amountEditText.text
+        val editText = itemView.amountEditText
+        if (currencyRate.editable
+            && text.toString() == currencyRate.amount
+                .toBigDecimal().stripTrailingZeros().toPlainString()
         ) {
             return
-        } else if ((itemView.amountEditText.text.isEmpty() ||
-                    itemView.amountEditText.text.isBlank()) && currencyRate.editable
-        ) {
-            itemView.amountEditText.setText(currencyRate.amount.toBigDecimal().stripTrailingZeros().toPlainString())
+        } else if ((text.isNullOrEmpty() || text.isNullOrBlank()) && currencyRate.editable) {
+            editText.setText(currencyRate.amount
+                .toBigDecimal().stripTrailingZeros().toPlainString())
         } else {
-            itemView.amountEditText.setText(currencyRate.amount.toBigDecimalWith2digits().toPlainString())
+            editText.setText(currencyRate.amount
+                .toBigDecimalWith2digits().toPlainString())
         }
     }
 
