@@ -17,13 +17,27 @@ android {
 
     }
 
+    signingConfigs {
+        release {
+            storeFile file("../secret/revolut-release.keystore")
+            storePassword "revolutrelease"
+            keyAlias "revoluttest"
+            keyPassword "revolut1234"
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
+    compileOptions {
+        // Sets Java compatibility to Java 8
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
