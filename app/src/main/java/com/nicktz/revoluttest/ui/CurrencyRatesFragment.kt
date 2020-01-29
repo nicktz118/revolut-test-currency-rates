@@ -5,8 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AbsListView
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE
 import com.nicktz.revoluttest.R
+import com.nicktz.revoluttest.utils.KeyboardUtil
 import kotlinx.android.synthetic.main.fragment_rates.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.math.BigDecimal
@@ -30,6 +34,14 @@ class CurrencyRatesFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         currencyRatesRecyclerView.apply {
             adapter = currencyAdapter
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    if (newState == SCROLL_STATE_IDLE) {
+                        KeyboardUtil.hideKeyboard(recyclerView)
+                    }
+                }
+            })
         }
         registerObservers()
     }
