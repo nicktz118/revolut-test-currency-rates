@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">revoluttest</string>
+    <string name="app_name">RevolutCurrencyRates</string>
     <string name="rate_page_title">Rates</string>
     <string name="error_message">Oops! Something went wrong!</string>
 </resources>
