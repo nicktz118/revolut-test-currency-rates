@@ -20,6 +20,9 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+# Importance
+-keep class com.nicktz.revoluttest.dto.** { *; }
+
 # koin
 -keep public class * extends java.lang.Exception
 -keepclassmembernames class kotlinx.** {
@@ -27,7 +30,6 @@
 }
 
 # retrofit
-
 # Retrofit does reflection on generic parameters. InnerClasses is required to use Signature and
 # EnclosingMethod is required to use InnerClasses.
 -keepattributes Signature, InnerClasses, EnclosingMethod
