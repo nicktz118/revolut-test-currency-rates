@@ -27,8 +27,11 @@ class CurrencyRatesViewModel(private val repository: CurrencyRateRepository) : V
 
     private val _result = MutableLiveData<List<CurrencyRateDisplayItem>>()
     private val _networkState = MutableLiveData<NetworkState>()
+    private val _scrollToBaseCurrency = MutableLiveData<Unit>()
     val result: LiveData<List<CurrencyRateDisplayItem>> = _result
     val networkState: LiveData<NetworkState> = _networkState
+    val scrollToBaseCurrency: LiveData<Unit> = _scrollToBaseCurrency
+
 
     private val eventSubject: PublishSubject<UpdateEvent> = PublishSubject.create()
     private val compositeDisposable = CompositeDisposable()
@@ -58,6 +61,7 @@ class CurrencyRatesViewModel(private val repository: CurrencyRateRepository) : V
                     updateDisplayItems(items)
                 },
                 onError = {
+                    it.printStackTrace()
                     _networkState.value = NetworkState.error(it.message)
                 }
             ).addTo(compositeDisposable)
@@ -131,6 +135,7 @@ class CurrencyRatesViewModel(private val repository: CurrencyRateRepository) : V
 
     fun onCurrencyClicked(displayItem: CurrencyRateDisplayItem) {
         eventSubject.onNext(UpdateEvent.UpdateBaseCurrency(displayItem.title))
+        _scrollToBaseCurrency.value = Unit
     }
 
     private fun updateDisplayItems(items: List<CurrencyRateDisplayItem>) {

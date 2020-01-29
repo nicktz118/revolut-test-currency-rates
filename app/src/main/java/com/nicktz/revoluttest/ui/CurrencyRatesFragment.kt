@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
+import android.widget.EditText
+import androidx.core.view.get
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE
@@ -34,6 +36,7 @@ class CurrencyRatesFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         currencyRatesRecyclerView.apply {
             adapter = currencyAdapter
+            itemAnimator = null
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
@@ -52,6 +55,12 @@ class CurrencyRatesFragment : Fragment() {
         })
         viewModel.networkState.observe(viewLifecycleOwner, Observer { networkState ->
             currencyAdapter.setNetworkState(networkState)
+        })
+        viewModel.scrollToBaseCurrency.observe(viewLifecycleOwner, Observer {
+            currencyRatesRecyclerView.postDelayed({
+                currencyRatesRecyclerView.smoothScrollToPosition(0)
+                }, 300
+            )
         })
     }
 
