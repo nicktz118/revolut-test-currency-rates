@@ -13,7 +13,6 @@ class NetworkStateItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     fun bindTo(networkState: NetworkState?) = with(itemView) {
         loading.isVisible = networkState?.status == Status.RUNNING
         msgTextView.isVisible = networkState?.msg != null
-        msgTextView.text = networkState?.msg
     }
 
     companion object {

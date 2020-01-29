@@ -2,7 +2,9 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp">
 
     <TextView
         android:id="@+id/msgTextView"
@@ -17,7 +19,7 @@
         android:textSize="20sp"
         android:textStyle="bold"
         android:layout_marginTop="18dp"
-        tools:text="OOPS!" />
+        android:text="@string/error_message" />
 
     <ProgressBar
         android:id="@+id/loading"
