@@ -4,5 +4,5 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 
 fun Double.toBigDecimalWith2digits(): BigDecimal {
-    return BigDecimal(this).setScale(2, RoundingMode.HALF_EVEN)
+    return BigDecimal(this).setScale(2, RoundingMode.HALF_EVEN).stripTrailingZeros()
 }
